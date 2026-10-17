@@ -257,4 +257,4 @@ BM25 will find your exact tokens while vectors find your paraphrases. The entity
 
 ---
 
-*Have questions? [Open a discussion](https://github.com/memo-fs/memofs/discussions). Found a bug? [File an issue](https://github.com/memo-fs/memofs/issues).*
+*Have questions? [Open a discussion](https://github.com/0xbuffdev/memofs/discussions). Found a bug? [File an issue](https://github.com/0xbuffdev/memofs/issues).*

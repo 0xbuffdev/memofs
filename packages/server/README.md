@@ -2,11 +2,11 @@
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@memofs/server"><img src="https://img.shields.io/npm/v/%40memofs%2Fserver?label=%40memofs%2Fserver&style=for-the-badge" alt="npm version" /></a> &nbsp;
-  <a href="https://github.com/memo-fs/memofs"><img src="https://img.shields.io/badge/status-beta-blue?style=for-the-badge" alt="Status: Beta" /></a> &nbsp;
+  <a href="https://github.com/0xbuffdev/memofs"><img src="https://img.shields.io/badge/status-beta-blue?style=for-the-badge" alt="Status: Beta" /></a> &nbsp;
   <a href="https://www.npmjs.com/package/@memofs/server"><img src="https://img.shields.io/npm/dm/%40memofs%2Fserver?style=for-the-badge" alt="npm downloads" /></a> &nbsp;
-  <a href="https://github.com/memo-fs/memofs/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/memo-fs/memofs/ci.yml?branch=main&style=for-the-badge&label=CI" alt="CI" /></a> &nbsp;
+  <a href="https://github.com/0xbuffdev/memofs/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/0xbuffdev/memofs/ci.yml?branch=main&style=for-the-badge&label=CI" alt="CI" /></a> &nbsp;
   <a href="https://docs.memofs.dev/"><img src="https://img.shields.io/badge/docs-online-blue?style=for-the-badge" alt="Docs" /></a> &nbsp;
-  <a href="https://github.com/memo-fs/memofs/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge" alt="MIT License" /></a>
+  <a href="https://github.com/0xbuffdev/memofs/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge" alt="MIT License" /></a>
 </p>
 
 Self-hostable MemoFS runtime server for Node and Cloudflare Workers deployments.
@@ -108,7 +108,7 @@ export default {
 };
 ```
 
-See [`examples/server/`](https://github.com/memo-fs/memofs/tree/main/examples/server)
+See [`examples/server/`](https://github.com/0xbuffdev/memofs/tree/main/examples/server)
 for the full self-host deploy guide (the canonical R2-compatible + Turso + OpenAI
 bundle, auth, and the Worker topology).
 
