@@ -2,18 +2,8 @@ import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { InMemoryMemoryStore, type MemoryEmbedder } from "@memofs/core";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { createMemoFSMcpRuntimeFromConfig } from "../src/index";
-
-const { createTransformersEmbedder } = vi.hoisted(() => ({
-	createTransformersEmbedder: vi.fn<(options: unknown) => unknown>(() => {
-		throw new Error("transformers adapter unavailable");
-	}),
-}));
-
-vi.mock("@memofs/adapter-transformers", () => ({
-	createTransformersEmbedder,
-}));
 
 /**
  * Create a throwaway MemoFS root dir for filesystem-backed local-mode tests.
@@ -42,13 +32,6 @@ afterEach(async () => {
 	}
 });
 
-beforeEach(() => {
-	createTransformersEmbedder.mockReset();
-	createTransformersEmbedder.mockImplementation(() => {
-		throw new Error("transformers adapter unavailable");
-	});
-});
-
 async function tempRoot() {
 	const { rootDir, cleanup } = await createTempRoot();
 	dirsToClean.push(rootDir);
@@ -68,18 +51,30 @@ async function tempRoot() {
  * - local mode stays functional with zero API keys (lexical fallback),
  * - a missing adapter never breaks recall (graceful degradation),
  * - disabling local embeddings keeps the runtime import-light.
+ *
+ * @remarks
+ * These tests inject `adapterFactory` rather than mocking the
+ * `@memofs/adapter-transformers` module. The production code path resolves
+ * that import from inside `@memofs/core`, which is consumed as a built `dist`
+ * and therefore sits outside vitest's module graph — `vi.mock` does not
+ * intercept it. CI builds core before testing (`test:run` depends on `^build`),
+ * so the real adapter was constructed and the mock recorded zero calls.
  */
 
 describe("createMemoFSMcpRuntimeFromConfig — embedder wiring", () => {
 	describe("lazy wiring", () => {
 		it("health does not initialize the local embedder", async () => {
+			const adapterFactory = vi.fn(async () => {
+				throw new Error("must not be constructed");
+			});
 			const runtime = createMemoFSMcpRuntimeFromConfig({
 				mode: "local",
 				store: new InMemoryMemoryStore(),
+				adapterFactory,
 			});
 			const health = await runtime.health();
 			expect(health.ok).toBe(true);
-			expect(createTransformersEmbedder).not.toHaveBeenCalled();
+			expect(adapterFactory).not.toHaveBeenCalled();
 		});
 
 		it("hybrid mode: constructs with cloud config and never throws on wiring", async () => {
@@ -87,26 +82,34 @@ describe("createMemoFSMcpRuntimeFromConfig — embedder wiring", () => {
 			// cloud-facing mode after the D4 trim; there is no standalone "cloud"
 			// mode. Pointed at a non-existent base URL so the client is constructed
 			// but unused; we only assert the runtime wires without throwing.
+			const adapterFactory = vi.fn(async () => {
+				throw new Error("must not be constructed");
+			});
 			const runtime = createMemoFSMcpRuntimeFromConfig({
 				mode: "hybrid",
 				cloud: { baseUrl: "https://invalid.example.com" },
 				recall: { localEmbeddings: true },
+				adapterFactory,
 			});
 			// Constructing the runtime must not throw and must not import the
 			// (absent) local adapter eagerly.
 			expect(runtime).toBeDefined();
-			expect(createTransformersEmbedder).not.toHaveBeenCalled();
+			expect(adapterFactory).not.toHaveBeenCalled();
 		});
 
 		it("forwards onModelProgress to the embedder without eagerly constructing the adapter", async () => {
 			const onModelProgress = vi.fn();
+			const adapterFactory = vi.fn(async () => {
+				throw new Error("must not be constructed");
+			});
 			const runtime = createMemoFSMcpRuntimeFromConfig({
 				mode: "local",
 				store: new InMemoryMemoryStore(),
 				onModelProgress,
+				adapterFactory,
 			});
 			expect(runtime).toBeDefined();
-			expect(createTransformersEmbedder).not.toHaveBeenCalled();
+			expect(adapterFactory).not.toHaveBeenCalled();
 		});
 
 		it("initializes on the first vector operation and recalls semantically", async () => {
@@ -133,21 +136,25 @@ describe("createMemoFSMcpRuntimeFromConfig — embedder wiring", () => {
 					};
 				},
 			};
-			createTransformersEmbedder.mockReturnValueOnce(semanticEmbedder);
+			// Injected rather than module-mocked: the real code path imports the
+			// adapter from inside @memofs/core, which resolves to a built dist and
+			// sits outside vitest's module graph, so vi.mock cannot intercept it.
+			const adapterFactory = vi.fn(async () => semanticEmbedder);
 
 			const runtime = createMemoFSMcpRuntimeFromConfig({
 				mode: "local",
 				store: new InMemoryMemoryStore(),
 				recall: { localEmbeddings: true, engine: "hybrid" },
+				adapterFactory,
 			});
-			expect(createTransformersEmbedder).not.toHaveBeenCalled();
+			expect(adapterFactory).not.toHaveBeenCalled();
 
 			// biome-ignore lint/style/noNonNullAssertion: local factory always wires writeMemory
 			await runtime.writeMemory!({
 				content: "PostgreSQL stores the account records.",
 				kind: "decision",
 			});
-			expect(createTransformersEmbedder).toHaveBeenCalledTimes(1);
+			expect(adapterFactory).toHaveBeenCalledTimes(1);
 
 			// No lexical terms overlap; this result must come from vector retrieval.
 			// biome-ignore lint/style/noNonNullAssertion: local factory always wires recall
@@ -156,15 +163,22 @@ describe("createMemoFSMcpRuntimeFromConfig — embedder wiring", () => {
 				limit: 5,
 			});
 			expect(result.items[0]?.text).toMatch(/PostgreSQL/i);
-			expect(createTransformersEmbedder).toHaveBeenCalledTimes(1);
+			expect(adapterFactory).toHaveBeenCalledTimes(1);
 		});
 	});
 
 	describe("local mode with zero API keys", () => {
 		it("recall falls back to the lexical path when the adapter is absent", async () => {
 			// Force the factory toward the local-embedder path, but the adapter
-			// package is an optional peer and mocked as unavailable here. Recall
-			// must degrade gracefully to lexical-only.
+			// package is an optional peer and unavailable here. Recall must degrade
+			// gracefully to lexical-only.
+			//
+			// The rejection is injected rather than module-mocked: the real code path
+			// imports the adapter from inside @memofs/core, which resolves to a built
+			// dist outside vitest's module graph, so vi.mock cannot intercept it.
+			const adapterFactory = vi.fn(async () => {
+				throw new Error("transformers adapter unavailable");
+			});
 			const { rootDir, cleanup } = await tempRoot();
 			try {
 				const runtime = createMemoFSMcpRuntimeFromConfig({
@@ -172,6 +186,7 @@ describe("createMemoFSMcpRuntimeFromConfig — embedder wiring", () => {
 					rootDir,
 					projectId: "mcp-factory",
 					recall: { localEmbeddings: true, engine: "hybrid" },
+					adapterFactory,
 				});
 
 				// biome-ignore lint/style/noNonNullAssertion: local factory always wires writeMemory
@@ -190,7 +205,7 @@ describe("createMemoFSMcpRuntimeFromConfig — embedder wiring", () => {
 				// could not initialize (no adapter).
 				expect(result.items.length).toBeGreaterThan(0);
 				expect(result.items[0]?.text).toMatch(/authentication/i);
-				expect(createTransformersEmbedder).toHaveBeenCalled();
+				expect(adapterFactory).toHaveBeenCalled();
 			} finally {
 				await cleanup();
 			}
