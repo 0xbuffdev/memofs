@@ -11,6 +11,7 @@ import {
 	createLazyLocalEmbedder,
 	type MemoFS,
 	type MemoFsConfig,
+	type MemoryEmbedder,
 	type MemoryStore,
 } from "@memofs/core";
 import { createNodeMemoFs } from "@memofs/core/node-fs";
@@ -59,6 +60,24 @@ export interface RuntimeFactoryOptions {
 	 * immediately upon runtime creation instead of waiting for the first vector operation.
 	 */
 	prewarm?: boolean;
+	/**
+	 * Injected adapter factory for tests. When provided, it replaces the dynamic
+	 * import of `@memofs/adapter-transformers`, so a test can exercise lazy
+	 * embedder wiring without depending on the mock intercepting an import that
+	 * happens inside `@memofs/core`.
+	 *
+	 * Production callers must omit this: the real path is what makes the adapter
+	 * an optional peer dependency.
+	 */
+	adapterFactory?: (options: {
+		model: string;
+		cacheDir?: string;
+		onProgress?: (info: {
+			progress: number;
+			status: string;
+			file?: string;
+		}) => void;
+	}) => Promise<MemoryEmbedder>;
 }
 
 /**
@@ -91,6 +110,9 @@ export function createMemoFSMcpRuntimeFromConfig(
 				...(options.onModelProgress === undefined
 					? {}
 					: { onProgress: options.onModelProgress }),
+				...(options.adapterFactory === undefined
+					? {}
+					: { adapterFactory: options.adapterFactory }),
 			})
 		: undefined;
 
