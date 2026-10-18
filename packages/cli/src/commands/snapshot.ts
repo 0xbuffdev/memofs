@@ -9,7 +9,7 @@ import type { MemoFS } from "@memofs/core";
 import { appendText, readTextIfExists, writeText } from "../cli/store-helpers";
 import type { CliOutput } from "../output/output";
 import { printJsonEnvelope } from "../output/output";
-import { MEMOFS_CLI_PATHS, REQUIRED_FILES } from "../protocol/constants";
+import { MEMOFS_CLI_PATHS, SNAPSHOT_FILES } from "../protocol/constants";
 import { stringifyJsonl } from "../protocol/jsonl";
 import { createSafeIdFromLabel, validateSnapshotLabel } from "../utils/labels";
 
@@ -84,7 +84,7 @@ export async function createCliSnapshot(
 	const path = `${MEMOFS_CLI_PATHS.snapshotsDir}/${id}.json`;
 	const files: Record<string, string> = {};
 
-	for (const filePath of REQUIRED_FILES) {
+	for (const filePath of SNAPSHOT_FILES) {
 		const content = await readTextIfExists(store, filePath);
 		if (content !== undefined) files[filePath] = content;
 	}

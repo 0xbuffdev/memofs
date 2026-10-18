@@ -45,7 +45,7 @@ describe("resolveSchemaPath", () => {
 		try {
 			// temp dir has no node_modules/@memofs/cli
 			expect(resolveSchemaPath(temp.rootDir)).toBe(
-				"https://docs.memofs.dev/schema/config.json",
+				"https://memofs.dev/schema/config.json",
 			);
 		} finally {
 			await temp.cleanup();

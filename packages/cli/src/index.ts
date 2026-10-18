@@ -33,6 +33,7 @@ export {
 	MEMOFS_DIR,
 	REQUIRED_DIRS,
 	REQUIRED_FILES,
+	SNAPSHOT_FILES,
 } from "./protocol/constants";
 export type { JsonlParseOptions, JsonlRecord } from "./protocol/jsonl";
 export { parseJsonl, stringifyJsonl } from "./protocol/jsonl";
