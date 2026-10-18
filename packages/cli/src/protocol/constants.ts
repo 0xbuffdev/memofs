@@ -5,6 +5,7 @@
  */
 
 import {
+	BOOTSTRAP_FILE_PATHS,
 	CANONICAL_MEMOFS_FILES,
 	CHUNKS_INDEX_PATH,
 	CONVERSATIONS_MEMORY_PATH,
@@ -40,9 +41,28 @@ export const MEMOFS_CLI_PATHS = {
 } as const;
 
 /**
- * Canonical array of required files in a MemoFS workspace.
+ * Files that must exist in an initialised MemoFS workspace.
+ *
+ * @remarks
+ * This is the bootstrap set, not the full canonical set. Trial ledgers
+ * (`trials/*.jsonl`) and `warrants/history.jsonl` are created lazily on first
+ * append so `init` output stays unchanged, so requiring them here made
+ * `doctor` and `validate` report a freshly-initialised workspace as broken.
+ *
+ * Use {@link SNAPSHOT_FILES} to capture everything that exists instead.
+ *
+ * @see BOOTSTRAP_FILE_PATHS in `@memofs/core`
  */
-export const REQUIRED_FILES = CANONICAL_MEMOFS_FILES;
+export const REQUIRED_FILES = BOOTSTRAP_FILE_PATHS;
+
+/**
+ * Every canonical file, for commands that capture what exists rather than
+ * assert what must. `snapshot` uses this so trial ledgers and warrant state
+ * are still captured once they have been written.
+ *
+ * @see CANONICAL_MEMOFS_FILES in `@memofs/core`
+ */
+export const SNAPSHOT_FILES = CANONICAL_MEMOFS_FILES;
 
 /**
  * Array of paths that must be initialized as directories inside a MemoFS workspace.

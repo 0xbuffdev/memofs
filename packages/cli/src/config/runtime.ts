@@ -34,7 +34,7 @@ export type { MemoFsConfigFile };
  * disk (for example, when package metadata has been stripped by a bundler).
  * Matches the schema's own `$id`.
  */
-const FALLBACK_SCHEMA_URL = "https://docs.memofs.dev/schema/config.json";
+const FALLBACK_SCHEMA_URL = "https://memofs.dev/schema/config.json";
 
 /**
  * Filesystem location to check for the schema, relative to the project root.
@@ -49,7 +49,7 @@ const FS_SCHEMA_PATH = "node_modules/@memofs/cli/schema/config.json";
  * {@link FALLBACK_SCHEMA_URL}.
  */
 const CONNECTORS_FALLBACK_SCHEMA_URL =
-	"https://docs.memofs.dev/schema/connectors.json";
+	"https://memofs.dev/schema/connectors.json";
 
 /**
  * Filesystem location to check for the connectors schema, relative to the

@@ -68,7 +68,7 @@ describe("resolveConnectorsSchemaPath", () => {
 		try {
 			// temp dir has no node_modules/@memofs/cli
 			expect(resolveConnectorsSchemaPath(temp.rootDir)).toBe(
-				"https://docs.memofs.dev/schema/connectors.json",
+				"https://memofs.dev/schema/connectors.json",
 			);
 		} finally {
 			await temp.cleanup();
@@ -121,9 +121,7 @@ describe("connectors.json $schema stamping", () => {
 
 		// Temp root has no node_modules/@memofs/cli → hosted fallback URL.
 		const afterAdd = await readConnectorsJson();
-		expect(afterAdd.$schema).toBe(
-			"https://docs.memofs.dev/schema/connectors.json",
-		);
+		expect(afterAdd.$schema).toBe("https://memofs.dev/schema/connectors.json");
 		expect(afterAdd.connectors).toEqual([
 			{
 				id: "github-main",
@@ -142,7 +140,7 @@ describe("connectors.json $schema stamping", () => {
 
 		const afterRemove = await readConnectorsJson();
 		expect(afterRemove.$schema).toBe(
-			"https://docs.memofs.dev/schema/connectors.json",
+			"https://memofs.dev/schema/connectors.json",
 		);
 		expect(afterRemove.connectors).toEqual([]);
 	});
@@ -186,7 +184,7 @@ describe("packaged connectors schema contents", () => {
 			unknown
 		>;
 
-		expect(hosted.$id).toBe("https://docs.memofs.dev/schema/connectors.json");
+		expect(hosted.$id).toBe("https://memofs.dev/schema/connectors.json");
 		expect({ ...packaged, $id: hosted.$id }).toEqual(hosted);
 	});
 });

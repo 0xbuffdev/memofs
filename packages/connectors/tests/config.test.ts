@@ -144,7 +144,7 @@ describe("validateConnectorsFile", () => {
 
 	it("tolerates a top-level $schema key (editor autocomplete reference)", () => {
 		const file = validateConnectorsFile({
-			$schema: "https://docs.memofs.dev/schema/connectors.json",
+			$schema: "https://memofs.dev/schema/connectors.json",
 			connectors: [
 				{ id: "x", type: "github", enabled: true, secretRef: "ss_a" },
 			],

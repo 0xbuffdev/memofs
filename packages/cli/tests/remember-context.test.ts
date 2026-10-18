@@ -105,5 +105,8 @@ describe("remember and context", () => {
 		} finally {
 			await temp.cleanup();
 		}
-	});
+		// Three in-process CLI runs against a real filesystem, each doing memory
+		// work. Measured at ~5.0-5.5s, so the 5s default is a coin flip and this
+		// test failed intermittently in CI under parallel load.
+	}, 30_000);
 });
