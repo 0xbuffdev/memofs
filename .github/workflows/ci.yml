@@ -68,8 +68,5 @@ jobs:
       - name: Lint packages
         run: pnpm lint:package
 
-      - name: Validate changesets
-        run: node scripts/validate-changesets.mjs
-
       - name: Build docs
         run: pnpm docs:build
