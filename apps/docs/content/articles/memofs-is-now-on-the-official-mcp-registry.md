@@ -63,4 +63,4 @@ That wires up hooks, rules, and the MCP server in one step. Read the [getting-st
 
 - **Registry listing:** [registry.modelcontextprotocol.io](https://registry.modelcontextprotocol.io)
 - **MCP server docs:** [memofs.dev/packages/mcp](https://memofs.dev/packages/mcp/)
-- **GitHub:** [github.com/memo-fs/memofs](https://github.com/memo-fs/memofs)
+- **GitHub:** [github.com/0xbuffdev/memofs](https://github.com/0xbuffdev/memofs)

@@ -10,14 +10,14 @@ export const SITE = {
 	docsUrl: "https://memofs.dev",
 	productUrl: "https://cloud.memofs.dev",
 	cloudUrl: "https://cloud.memofs.dev",
-	githubUrl: "https://github.com/memo-fs/memofs",
+	githubUrl: "https://github.com/0xbuffdev/memofs",
 	xUrl: "https://x.com/memofsdev",
 	xHandle: "@memofsdev",
 	engram: "https://engram.memofs.dev",
 	defaultImagePath: "/og-default.png",
 	description:
 		"The file-first memory runtime for AI agents. Store decisions, facts, and context as markdown in your project. Local by default, cloud-ready.",
-	githubReleasesUrl: "https://github.com/memo-fs/memofs/releases",
+	githubReleasesUrl: "https://github.com/0xbuffdev/memofs/releases",
 	/** Newest tagged release train (also the GitHub "Latest" release). */
 	latestRelease: "v1.3.0-beta.3",
 } as const;

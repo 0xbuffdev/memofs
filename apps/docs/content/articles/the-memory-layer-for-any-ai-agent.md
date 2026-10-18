@@ -258,4 +258,4 @@ Then open your agent and watch it start the next session already knowing your pr
 
 ---
 
-*Building agents that remember? Tell us what you're building, and which memory primitives you're still missing. [Open a discussion](https://github.com/memo-fs/memofs/discussions) or [file an issue](https://github.com/memo-fs/memofs/issues).*
+*Building agents that remember? Tell us what you're building, and which memory primitives you're still missing. [Open a discussion](https://github.com/0xbuffdev/memofs/discussions) or [file an issue](https://github.com/0xbuffdev/memofs/issues).*

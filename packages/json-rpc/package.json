@@ -6,12 +6,12 @@
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/memo-fs/memofs.git",
+		"url": "git+https://github.com/0xbuffdev/memofs.git",
 		"directory": "packages/json-rpc"
 	},
 	"homepage": "https://docs.memofs.dev/packages/json-rpc/",
 	"bugs": {
-		"url": "https://github.com/memo-fs/memofs/issues"
+		"url": "https://github.com/0xbuffdev/memofs/issues"
 	},
 	"type": "module",
 	"sideEffects": false,

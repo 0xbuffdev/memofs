@@ -7,12 +7,12 @@
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/memo-fs/memofs.git",
+		"url": "git+https://github.com/0xbuffdev/memofs.git",
 		"directory": "packages/mcp-server"
 	},
 	"homepage": "https://docs.memofs.dev/packages/mcp/",
 	"bugs": {
-		"url": "https://github.com/memo-fs/memofs/issues"
+		"url": "https://github.com/0xbuffdev/memofs/issues"
 	},
 	"type": "module",
 	"sideEffects": false,

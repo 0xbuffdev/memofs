@@ -72,7 +72,7 @@ corepack prepare pnpm@9 --activate
 Clone the repo:
 
 ```bash
-git clone https://github.com/memo-fs/memofs.git
+git clone https://github.com/0xbuffdev/memofs.git
 cd memofs
 ```
 

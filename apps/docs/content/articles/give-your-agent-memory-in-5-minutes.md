@@ -373,4 +373,4 @@ No database. No API keys. No infrastructure. Plain files, versioned by Git, port
 
 ---
 
-*Have questions? [Open a discussion](https://github.com/memo-fs/memofs/discussions). Found a bug? [File an issue](https://github.com/memo-fs/memofs/issues).*
+*Have questions? [Open a discussion](https://github.com/0xbuffdev/memofs/discussions). Found a bug? [File an issue](https://github.com/0xbuffdev/memofs/issues).*

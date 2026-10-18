@@ -4,7 +4,7 @@
 	"private": true,
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/memo-fs/memofs.git"
+		"url": "git+https://github.com/0xbuffdev/memofs.git"
 	},
 	"scripts": {
 		"build": "turbo run build",
@@ -85,7 +85,7 @@
 	"description": "MemoFS — open-source file-first memory runtime for AI agents.",
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/memo-fs/memofs/issues"
+		"url": "https://github.com/0xbuffdev/memofs/issues"
 	},
 	"homepage": "https://docs.memofs.dev/",
 	"funding": {

@@ -7,7 +7,7 @@
 	"homepage": "https://memofs.dev/",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/memo-fs/memofs.git",
+		"url": "git+https://github.com/0xbuffdev/memofs.git",
 		"directory": "apps/docs"
 	},
 	"scripts": {

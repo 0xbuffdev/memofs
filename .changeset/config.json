@@ -1,6 +1,6 @@
 {
 	"$schema": "https://unpkg.com/@changesets/config@2.3.1/schema.json",
-	"changelog": ["@changesets/changelog-github", { "repo": "memo-fs/memofs" }],
+	"changelog": ["@changesets/changelog-github", { "repo": "0xbuffdev/memofs" }],
 	"commit": false,
 	"access": "public",
 	"baseBranch": "main",
