@@ -1,42 +1,54 @@
-# MemoFS — Agent Guidelines
+# MemoFS
 
-MemoFS is the open-source, file-first memory runtime for AI agents.
+File-first memory runtime for AI agents. Memory lives as Markdown and JSONL under `.memofs/`, so it can be `cat`-ed, `git diff`-ed, and rolled back. Overview, package list, and quick start: `README.md`.
 
-## Monorepo Architecture
+## Positioning
 
-- **Package Manager & Monorepo**: `pnpm` workspace with Turborepo.
-- **Package Scopes**:
-  - `@memofs/*`: Public, published packages (`packages/*`).
-  - `@repo/*`: Private internal tooling and build configs (`tooling/*`).
-- **Core Runtime & Entrypoints (`@memofs/core`)**:
-  - Universal/Edge entrypoint: `@memofs/core` (no Node.js-specific dependencies).
-  - Node.js filesystem entrypoint: `@memofs/core/node-fs`.
-  - Cloud replication client: `@memofs/core/cloud-client`.
-- **Tooling Stack**: TypeScript, Biome for formatting and linting, tsdown / rolldown for builds, Vitest for testing.
+MemoFS is for **AI agents in general**, not only coding agents. Balance framing 50/50 between **users of AI agents** (running agents day-to-day via MCP or lifecycle hooks) and **builders of AI agents** (building agents and frameworks on `@memofs/core` or `@memofs/server`).
 
-## Core Behavioral Principles
+## Package Scopes
 
-- **Positioning & Terminology**: MemoFS is a file-first memory runtime for **AI agents in general** (not exclusively coding agents). Always balance framing 50/50 between **users of AI agents** (running agents day-to-day via MCP or lifecycle hooks) and **builders of AI agents** (building agents and frameworks with `@memofs/core` or `@memofs/server`).
-- **Facts Over Assumptions**: Always inspect source code and verify contracts directly. Do not rely on unverified assumptions.
-- **Package Boundaries**: Strictly preserve package isolation. Do not import private `@repo/*` packages into public `@memofs/*` distributions.
-- **Code Style & Modularity**: Keep source and test files cohesive and modular (target `<= 500 LOC` per file). Use structured logging rather than raw `console.log` in library code.
-- **Build Configurations**: Reuse shared build configs from `@repo/tsdown` (`pkgConfig`) rather than duplicating build flags.
-- **Clean Git Hygiene**: Never commit secrets, API keys, `.env` files, or gitignored runtime data.
+- `@memofs/*` — published public packages, `packages/*`.
+- `@repo/*` — private tooling and build config, `tooling/*`. A published `@memofs/*` package must never import a `@repo/*` package.
+- `@memofs/core` entrypoints: the default export is universal/edge (no Node built-ins), with `node-fs` and `cloud-client` as explicit subpaths.
+
+## Commands
+
+Run from the repo root.
+
+| Task | Command |
+|------|---------|
+| Done gate — checks, typecheck, test, build, lint, docs | `pnpm validate:workspace` |
+| Test one package | `pnpm --filter @memofs/core test:run` |
+| Test one file | `pnpm --filter @memofs/core test:run tests/agentfs/contract.test.ts` |
+| Typecheck one package | `pnpm --filter @memofs/core typecheck` |
+| Lint and format | `pnpm format-and-lint` |
+| Fix lint and format | `pnpm format-and-lint:fix` |
+| Release preflight | `pnpm release:preflight` |
+
+## External References
+
+| Need | File |
+|------|------|
+| Overview, architecture, packages, quick start | `README.md` |
+| Setup, commit style, PR checklist, package and dependency rules | `CONTRIBUTING.md` |
+| Security policy and vulnerability reporting | `SECURITY.md` |
+| Code of conduct | `CODE_OF_CONDUCT.md` |
+| Documentation site | `apps/docs` |
+| CI | `.github/workflows/ci.yml` |
+| Issue tracker | GitHub Issues |
 
 ## Workspace Rules
 
-- [Monorepo structure](./.agents/rules/monorepo-structure.md)
-- [Package naming](./.agents/rules/package-naming.md)
-- [Package boundaries](./.agents/rules/package-boundaries.md)
-- [Package build rules](./.agents/rules/package-build-rules.md)
-- [Adding a new package](./.agents/rules/adding-new-package.md)
-- [Code style](./.agents/rules/code-style.md)
-- [Changelog and comment hygiene](./.agents/rules/changelog-and-comment-hygiene.md)
-- [TypeScript rules](./.agents/rules/typescript-rules.md)
-- [Technology stack](./.agents/rules/technology-stack.md)
-- [Development commands](./.agents/rules/development-commands.md)
-- [Git conventions](./.agents/rules/git-conventions.md)
-- [Testing](./.agents/rules/testing.md)
-- [Testing requirements](./.agents/rules/testing-requirements.md)
-- [Core concepts](./.agents/rules/core-concepts.md)
+Each file owns its topic. Read it before writing code rather than relying on memory.
 
+**Repo shape** — [monorepo-structure](./.agents/rules/monorepo-structure.md) · [package-naming](./.agents/rules/package-naming.md) · [package-boundaries](./.agents/rules/package-boundaries.md) · [package-build-rules](./.agents/rules/package-build-rules.md) · [adding-new-package](./.agents/rules/adding-new-package.md)
+
+**Code** — [typescript-rules](./.agents/rules/typescript-rules.md) · [code-style](./.agents/rules/code-style.md) · [changelog-and-comment-hygiene](./.agents/rules/changelog-and-comment-hygiene.md)
+
+**Process** — [core-concepts](./.agents/rules/core-concepts.md) · [development-commands](./.agents/rules/development-commands.md) · [git-conventions](./.agents/rules/git-conventions.md) · [testing](./.agents/rules/testing.md) · [testing-requirements](./.agents/rules/testing-requirements.md) · [technology-stack](./.agents/rules/technology-stack.md)
+
+## Skill Discovery
+
+- Before improvising a workflow you have handled before, check whether a skill covers it: load `find-skills`, or run `npx skills find <query>`.
+- Install a vetted match with `npx skills add <owner/repo@skill> -g -y`; prefer 1K+ installs from known owners. If nothing fits, do the work directly.
