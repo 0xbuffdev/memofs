@@ -35,6 +35,7 @@ yarn-error.log*
 
 # Editor & AI Tool Configs (Local / Machine-Specific)
 .vscode/
+.codex/
 opencode.json
 skills-lock.json
 .agents/skills/
@@ -44,15 +45,3 @@ skills-lock.json
 agent-sessions/
 examples/**/.memofs/
 packages/**/.memofs/
-
-# Internal Docs & Experiments
-CONTEXT.md
-docs/README.md
-teasers.md
-tickets-to-close.md
-adr/
-internals/
-agents/
-architecture/
-internal/
-test-demo/
